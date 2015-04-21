@@ -13,16 +13,35 @@
     </head>
     <body>
         <div class="container">
-            <h1>Test 1</h1>
-            <form class="form form-1" action="ajax.php" method="post" data-target=".content-1" data-ajaxform="true">
+            <div class="page-header">
+                <h1>jquery.ajaxForm</h1>
+            </div>
+            <h3>Example data attribute</h3>
+            <form id="Form1" class="form" action="ajax.php" method="post" data-target="#Content1" data-ajaxform="true">
                 <button class="btn btn-default" type="submit" data-loading-text="Please wait...">Load</button>
             </form>
-            <div class="content content-1">
+            <div id="Content1" class="content"></div>
 
-            </div>
+
+            <h3>Example jquery validation</h3>
+            <form id="Form2" class="form-inline validate" action="ajax.php" method="post" data-target="#Content2">
+                <div class="form-group">
+                    <input class="form-control" type="text" name="test" required placeholder="Required...">
+                </div>
+                <button class="btn btn-default" type="submit" data-loading-text="Please wait...">Load</button>
+            </form>
+            <div id="Content2" class="content"></div>
+
+
+            <h3>Example error</h3>
+            <form id="Form3" class="form" action="error.php" method="post" data-target="#Content3" data-ajaxform="true">
+                <button class="btn btn-default" type="submit" data-loading-text="Please wait...">Load</button>
+            </form>
+            <div id="Content3" class="content"></div>
         </div>
 
         <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
         <script src="../src/jquery.ajaxForm.js"></script>
         <script src="js/main.js"></script>
     </body>

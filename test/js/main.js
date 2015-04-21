@@ -1,11 +1,13 @@
 (function ($){
 
-	$('form').on('submit.ajaxForm', function (event){
-		console.log("submit.ajaxForm");
+	$('#Form3').on('error.ajaxForm', function (event){
 		console.log(event);
-	}).on('success.ajaxForm', function (event){
-		console.log("success.ajaxForm");
-		console.log(event);
+	});
+
+	$('form.validate').validate({
+		submitHandler: function(form) {
+			$(form).ajaxForm('send');
+		}
 	});
 
 }(jQuery));
