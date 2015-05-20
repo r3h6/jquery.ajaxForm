@@ -1,5 +1,5 @@
 <?php
-sleep(1);
+sleep(2);
 echo date("<p>r</p>");
 ?>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod

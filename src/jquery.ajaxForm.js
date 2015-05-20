@@ -16,9 +16,7 @@
 			var ajaxForm = $(this).data('ajaxForm');
 			if (ajaxForm.isEnabled()){
 				event.preventDefault();
-				if (!event.namespace){
-					ajaxForm.send();
-				}
+				ajaxForm.send();
 			}
 		});
 	}
@@ -41,17 +39,18 @@
 	}
 
 	AjaxForm.prototype.send = function (){
+
 		if (this.jqXHR){
 			this.jqXHR.abort();
 		}
 
-		var $loader;
+		var $loader = null;
 		var options = this.getOptions();
 
 		var request = {
 			url: options.action || this.$el.attr('action'),
 			type: options.method || this.$el.attr('method'),
-			dataType: options.format || 'html',
+			dataType: options.format,
 			data: this.$el.serialize(),
 			context: this,
 			complete: function(jqXHR, textStatus){
@@ -74,7 +73,13 @@
 				});
 
 				// Remove loader.
-				$loader.remove();
+				if ($loader !== null){
+					$loader.remove();
+				}
+
+				if (options.reset){
+					this.$el.trigger('reset');
+				}
 
 				// Remove loading classes.
 				this.$el.removeClass('loading');
@@ -87,8 +92,10 @@
 				if (e.isDefaultPrevented()) return;
 
 				// Update content.
-				$(options.target).html(data);
-				this.$el.trigger('updated.ajaxForm', [options.target]);
+				if (options.target){
+					$(options.target).html(data);
+				}
+				this.$el.trigger('updated.ajaxForm', [this]);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				if (textStatus !== AjaxForm.STATUS_ABORT){
@@ -99,7 +106,7 @@
 
 					// Update content.
 					$(options.target).html(jqXHR.responseText);
-					this.$el.trigger('updated.ajaxForm', [options.target]);
+					this.$el.trigger('updated.ajaxForm', [this]);
 				}
 			}
 		};
@@ -115,8 +122,10 @@
 		}
 
 		// Create loader.
-		$loader = $('<div class="ajax-loader" />');
-		$(options.target).addClass('loading').append($loader);
+		if (options.target){
+			$loader = $('<div class="ajax-loader" />');
+			$(options.target).addClass('loading').append($loader);
+		}
 		this.$el.addClass('loading');
 
 		// Replace button text with loading text.
@@ -166,7 +175,8 @@
 		action: null,
 		target: null,
 		method: null,
-		format: 'html'
+		reset: false,
+		format: null
 	};
 
 	$.fn.ajaxForm             = Plugin
