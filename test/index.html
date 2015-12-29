@@ -34,6 +34,7 @@
             </form>
             <div id="ExampleResetTarget" class="target"></div>
 
+
             <h3>Example jquery validation</h3>
             <form id="ExampleValidation" class="form-inline validate" action="ajax.php" method="post" data-target="#ExampleValidationTarget">
                 <div class="form-group">
@@ -52,10 +53,18 @@
 
 
             <h3>Example json</h3>
-            <form id="ExampleJson" class="form" action="ajax.json" method="post" data-ajaxform="true">
+            <form id="ExampleJson" class="form" action="ajax.json" method="post" data-target="#ExampleJsonTarget" data-ajaxform="true">
                 <button class="btn btn-default" type="submit" data-loading-text="Please wait...">Load</button>
             </form>
             <div id="ExampleJsonTarget" class="target"></div>
+
+
+            <h3>Example reload form</h3>
+            <div id="ExampleReloadFormTarget">
+                <form id="ExampleReloadForm" class="form" action="form.html" method="post" data-target="#ExampleReloadFormTarget" data-ajaxform="true">
+                    <button class="btn btn-default" type="submit" data-loading-text="Please wait...">Load</button>
+                </form>
+            </div>
         </div>
 
         <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>

@@ -12,21 +12,14 @@
 		this.options = $.extend(true, {}, $.fn.ajaxForm.defaultOptions, options);
 
 		// Register submit event
-		this.$el.on('submit', function(event){
-			var ajaxForm = $(this).data('ajaxForm');
-			if (ajaxForm.isEnabled()){
-				event.preventDefault();
-				ajaxForm.send();
-			}
-		});
+		this.$el.on('submit.ajaxForm', $.proxy(function (event){
+			event.preventDefault();
+			this.send();
+		}, this));
 	}
 
 	AjaxForm.VERSION  = '1.0.0';
 	AjaxForm.STATUS_ABORT = 'abort';
-
-	AjaxForm.prototype.isEnabled = function (){
-		return Boolean(this.$el.data('ajaxform'));
-	}
 
 	AjaxForm.prototype.getOptions = function (){
 		var options = {};
@@ -57,7 +50,9 @@
 				// Trigger custom event.
 				var e = new $.Event('complete.ajaxForm');
 				this.$el.trigger(e, [jqXHR]);
-				if (e.isDefaultPrevented()) return;
+				if (e.isDefaultPrevented()){
+					return;
+				}
 
 				// Unfreeze form.
 				this.unfreeze();
@@ -89,24 +84,24 @@
 				// Trigger custom event.
 				var e = new $.Event('success.ajaxForm');
 				this.$el.trigger(e, [data]);
-				if (e.isDefaultPrevented()) return;
+				if (e.isDefaultPrevented()){
+					return;
+				}
 
 				// Update content.
-				if (options.target){
-					$(options.target).html(data);
-				}
-				this.$el.trigger('updated.ajaxForm', [this]);
+				$(options.target).html(data).trigger('domUpdated.ajaxForm', [this]);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				if (textStatus !== AjaxForm.STATUS_ABORT){
 					// Trigger custom event.
 					var e = $.Event('error.ajaxForm');
 					this.$el.trigger(e, [jqXHR, textStatus, errorThrown]);
-					if (e.isDefaultPrevented()) return;
+					if (e.isDefaultPrevented()){
+						return;
+					}
 
 					// Update content.
-					$(options.target).html(jqXHR.responseText);
-					this.$el.trigger('updated.ajaxForm', [this]);
+					$(options.target).html(jqXHR.responseText).trigger('domUpdated.ajaxForm', [this]);
 				}
 			}
 		};
@@ -114,7 +109,9 @@
 		// Trigger send event.
 		var e = $.Event('send.ajaxForm');
 		this.$el.trigger(e, [request]);
-		if (e.isDefaultPrevented()) return;
+		if (e.isDefaultPrevented()){
+			return;
+		}
 
 		// Freeze form.
 		if (options.freeze){
